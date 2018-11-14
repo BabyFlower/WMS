@@ -22,7 +22,7 @@ public class itemSearchController {
     @Autowired
     private IProjectService projectService;
     private Map data;
-    @RequestMapping(value = "/item/search",method = RequestMethod.GET)
+    @RequestMapping(value = "/itemList",method = RequestMethod.GET)
     public JSONObject addsite(Model model, HttpServletRequest request){
 
         List<Project> projects = this.projectService.findAll();
