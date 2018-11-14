@@ -19,8 +19,8 @@ public class SmsTool {
     private  String Url="http://sh2.ipyy.com/sms.aspx?action=send";
     public void sendRegisterCode(String phoneNumber, String code) {
         StringBuffer sb = new StringBuffer();
-        sb.append("欢迎使用水杯子充值中心！您的验证码是：")
-                .append(code+"【水杯子】");
+        sb.append("欢迎使用WMS仓储系统！您的验证码是：")
+                .append(code+"【WMS】");
         HttpClient client=new HttpClient();
         new Thread(new Runnable() {
             @Override

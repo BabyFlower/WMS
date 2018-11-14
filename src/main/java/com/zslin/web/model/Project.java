@@ -1,9 +1,11 @@
 package com.zslin.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 
 /**
@@ -19,11 +21,11 @@ public class Project {
     private Integer id;
 
     private String name;
-    private Date startDate;
-    private Date releaseDate;
+    private String startDate;
+    private String releaseDate;
     private String principle;
     private String remarks;
 
-    @OneToOne(mappedBy = "project")
-    private Goods_info goods_info;
+    @OneToMany(mappedBy = "project")
+    private List<Goods_info> goods_info;
 }

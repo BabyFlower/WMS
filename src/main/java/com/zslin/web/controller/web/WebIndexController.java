@@ -23,7 +23,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.swing.event.HyperlinkEvent;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
@@ -57,7 +60,7 @@ public class WebIndexController {
     private Map data;
     private String registerCode="";
     @RequestMapping(value={"","/","index"},method=RequestMethod.GET)
-    public String index(Model model,HttpServletRequest request){
+    public String index(Model model, HttpServletRequest request){
         return "web/index";
     }
     /** 用户注册 */
@@ -413,7 +416,7 @@ public class WebIndexController {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
             if(email==null || password==null) {
-                throw new SystemException("请输入邮箱地址和密码登陆。");
+                throw new SystemException("请输入手机号和密码登陆。");
             }
             Account account = accountService.findByEmail(email);
             if(account==null || !account.getStatus().equalsIgnoreCase("1")) {

@@ -26,5 +26,5 @@ public class Priority {
     private Boolean userManage_d;
 
     @OneToMany(mappedBy = "priority")
-    private List<User> user;
+    private List<wms_User> user;
 }
