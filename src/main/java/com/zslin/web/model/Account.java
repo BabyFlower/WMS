@@ -45,9 +45,4 @@ public class Account {
     /**  充值状态：0为未成功，1为成功，null为初始值*/
    private String paystate;
 
-   @ManyToOne
-    private Card card;
-
-   @OneToMany(mappedBy = "account")
-    private List<Order> orders;
 }

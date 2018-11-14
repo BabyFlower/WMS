@@ -1,9 +1,6 @@
 package com.zslin.basic.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.zslin.web.model.Site;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,16 +27,4 @@ public class User {
 
     @Column(name="is_admin")
     private Integer isAdmin;
-
-    @OneToMany(mappedBy = "user")
-/*    @JsonManagedReference*/
-    private List<Site> sites;
-
-   /* public User() {
-    }
-
-    protected boolean canEqual(Object other) {
-        return other instanceof User;
-    }
-*/
 }

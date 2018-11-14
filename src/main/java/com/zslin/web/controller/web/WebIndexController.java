@@ -46,17 +46,8 @@ public class WebIndexController {
     @Autowired
     private SmsTool smsTool;
     @Autowired
-    private ICardService cardService;
-    @Autowired
     private IUserService userService;
-    @Autowired
-    private ISiteService siteService;
-    @Autowired
-    private IAlarmService alarmService;
-    @Autowired
-    private IMaintainService maintainService;
-    @Autowired
-    private ISenddataService senddataService;
+
     private Map data;
     private String registerCode="";
     @RequestMapping(value={"","/","index"},method=RequestMethod.GET)
@@ -195,64 +186,6 @@ public class WebIndexController {
         return "pages/data";
     }
 
-    @RequestMapping(value = "basic/alarm",method = RequestMethod.GET)
-    public String alarm(Model model) {
-        Alarm alarm=this.alarmService.findOne(1);
-        model.addAttribute("alarm",alarm);
-        return "pages/alarm";
-    }
-
-    @RequestMapping(value = "basic/maintain",method = RequestMethod.GET)
-    public String maintain(Model model) {
-//     List<Maintain> maintains=this.maintainService.findAll();
-        Maintain maintains=this.maintainService.findOne(25545);
-        model.addAttribute("prods",maintains);
-        Alarm alarm=this.alarmService.findOne(1);
-            model.addAttribute("alarm",alarm);
-        return "pages/maintain";
-    }
-
-    @RequestMapping(value = "basic/maintaininfo",method = RequestMethod.GET)
-    public String maintaininfo(Model model, HttpServletRequest request){
-        String deviceId=request.getParameter("deviceId");
-        List<Senddata> senddatas=this.senddataService.findByD_id(Integer.parseInt(deviceId));
-        model.addAttribute("prods",senddatas);
-        model.addAttribute("deviceId",deviceId);
-        Alarm alarm=this.alarmService.findOne(1);
-        model.addAttribute("alarm",alarm);
-        return "pages/maintaininfo";
-    }
-
-    @RequestMapping(value = "basic/pay",method = RequestMethod.GET)
-    public String pay(Model model,HttpServletRequest request) {
-        User user=(User)request.getSession().getAttribute("login_user");
-        if (user.getIsAdmin()==1)
-        {
-            List<Account> accounts=this.accountService.findAll();
-            model.addAttribute("prods",accounts);
-            int usernumber=this.accountService.usernumber();
-            int remainall=this.cardService.remainall();
-            model.addAttribute("usernumber",usernumber);
-            model.addAttribute("remainall",remainall);
-        }
-        return "pages/pay";
-    }
-
-     /** 站点信息 */
-    @RequestMapping(value = "basic/siteinfo")
-    public String siteinfo(Model model,HttpServletRequest request) {
-        User user=(User)request.getSession().getAttribute("login_user");
-        if(user.getIsAdmin()==1){
-            List<Site> sites=this.siteService.findAll();
-            model.addAttribute("prods",sites);
-            return "pages/siteinfo";
-        }else{
-        List<Site> sites=this.userService.findByUsername(user.getUsername()).getSites();
-        model.addAttribute("prods",sites);
-        return "pages/siteinfo";
-        }
-    }
-
     /** 站点添加 */
     @RequestMapping(value = "basic/addsite")
     public String addsite(Model model) {
@@ -261,16 +194,6 @@ public class WebIndexController {
                 return "pages/addsite";
     }
 
-    /** 设备信息  */
-    @RequestMapping(value = "basic/deviceinfo")
-    public String deviceinfo(Model model, HttpServletRequest request){
-         String siteid=request.getParameter("siteid");
-         Site site=this.siteService.findById(Integer.parseInt(siteid));
-          List<Device> devices=site.getDevices();
-          model.addAttribute("prods",devices);
-          request.getSession().setAttribute("site",site);
-          return "pages/deviceinfo";
-    }
 
     /** 设备添加 */
     @RequestMapping(value = "basic/adddevice")
@@ -306,64 +229,6 @@ public class WebIndexController {
         User user=this.userService.findByUsername(username);
         model.addAttribute("user",user);
         return "pages/verifyuser";
-    }
-
-    /** app用户登录*/
-    @RequestMapping(value = "app/login")
-    @ResponseBody
-    public JSONObject applogin(@RequestParam String username,@RequestParam String password,HttpServletRequest request){
-        String method = request.getMethod();
-        String Cardnumber;
-        data=new LinkedHashMap();
-        System.out.println(username+password);
-        if("post".equalsIgnoreCase(method)) {
-            if(username.equals("") || password.equals("")) {
-                data.put("state","fail");
-                JSONObject result = JSONObject.fromObject(data);
-                return result;
-            }
-            Account account=this.accountService.findByEmail(username);
-
-            if(account==null || account.getStatus().equals("0")) {
-                data.put("state","fail");
-                JSONObject result = JSONObject.fromObject(data);
-                return result;
-            }
-            try {
-                String pwd = SecurityUtil.md5(username, password);
-                if(!pwd.equals(account.getPassword())) {
-                    data.put("state","fail");
-                    JSONObject result = JSONObject.fromObject(data);
-                    return result;
-                } else {
-                    Accountinfo accountinfo=new Accountinfo();
-                    accountinfo.setEmail(username);
-                    if (account.getCard()==null){
-                        accountinfo.setRest("0");
-                        accountinfo.setCardnumber("");
-                    }else{
-
-                        accountinfo.setRest(account.getCard().getRest().toString());
-                        Cardnumber = account.getCard().getCid();
-                        Long newCardnumber=Long.parseLong(Cardnumber);
-                        newCardnumber=newCardnumber - 3030303030303030L;
-                        accountinfo.setCardnumber(String.format("%08d", newCardnumber));
-                    }
-                    data.put("state","success");
-                    data.put("userinfo",accountinfo);
-                    JSONObject result = JSONObject.fromObject(data);
-                    return result;
-                }
-            } catch (NoSuchAlgorithmException e) {
-                data.put("state","fail");
-                JSONObject result = JSONObject.fromObject(data);
-                return result;
-            }
-        } else {
-            data.put("state","fail");
-            JSONObject result = JSONObject.fromObject(data);
-            return result;
-        }
     }
 
     /** 用户登陆 */

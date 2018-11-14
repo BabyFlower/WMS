@@ -1,6 +1,5 @@
 package com.zslin.web.service;
 
-import com.zslin.web.model.Device;
 import com.zslin.web.model.Goods_info;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

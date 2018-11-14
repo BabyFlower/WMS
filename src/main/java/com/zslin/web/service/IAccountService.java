@@ -1,14 +1,9 @@
 package com.zslin.web.service;
 
 import com.zslin.web.model.Account;
-import com.zslin.web.model.Device;
-import org.hibernate.sql.Update;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 /**
  *
